@@ -1,8 +1,8 @@
-import { Patient } from './patient.interface';
+import { IPatient } from './patient.interface';
 
-export interface PatientRepository {
-  createPatient: (patient: Patient) => Promise<Patient>;
-  findPatientByUserID: (userID: string) => Promise<Patient>;
-  getAllPatients: (patientInfo: string) => Promise<Patient[]>;
-  getPatientByID: (patientID: string) => Promise<Patient>;
+export interface IPatientRepository {
+  createPatient: (patient: IPatient) => Promise<IPatient>;
+  findPatientByUserID: (userID: string) => Promise<IPatient>;
+  getAllPatients: (patientInfo: string) => Promise<IPatient[]>;
+  getPatientByID: (patientID: string) => Promise<IPatient>;
 }

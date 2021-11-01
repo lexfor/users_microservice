@@ -1,4 +1,4 @@
-export interface Patient {
+export interface IPatient {
   id: string;
   name: string;
   birthday: string;

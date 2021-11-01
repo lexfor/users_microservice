@@ -1,19 +1,16 @@
-export class GetUser {
+import { PatientMapper } from '../mapper/patient.mapper';
+import { PatientRepository } from '../patient.repository';
+import { IPatient } from '../interfaces/patient.interface';
+import { PatientEntity } from '../entities/patient.entity';
+
+export class FindPatientByUserID {
   constructor(
-    private readonly mapper: UserMapper,
-    private readonly repository: UserRepository,
+    private readonly mapper: PatientMapper,
+    private readonly repository: PatientRepository,
   ) {}
 
-  async getUser(loginUserDto: LoginUserDto, role: string) {
-    const userRow: IUser = await this.repository.getUser(
-      loginUserDto.login,
-      role,
-    );
-    const userEntity: UserEntity = this.mapper.toEntity(userRow);
-    if (await userEntity.checkPassword(loginUserDto.password)) {
-      return userRow;
-    } else {
-      throw new HttpException('wrong password', HttpStatus.UNAUTHORIZED);
-    }
+  async findPatientByUserID(userID: string): Promise<PatientEntity> {
+    const userRow: IPatient = await this.repository.findPatientByUserID(userID);
+    return this.mapper.toEntity(userRow);
   }
 }

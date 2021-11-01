@@ -1,8 +1,8 @@
 import { v1 as uuidv1 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
-import { CreatePatientDto } from './dto/create-patient.dto';
-import { IPatient } from './interfaces/patient.interface';
+import { CreatePatientDto } from '../dto/create-patient.dto';
+import { IPatient } from '../interfaces/patient.interface';
 
 @Injectable()
 export class PatientEntity {
@@ -27,7 +27,7 @@ export class PatientEntity {
     this.name = name;
     this.birthday = birthday;
     this.gender = gender;
-    this.mail = gender;
+    this.mail = mail;
   }
 
   create(createPatientDto: CreatePatientDto): PatientEntity {

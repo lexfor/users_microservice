@@ -1,20 +1,24 @@
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UserEntity } from '../entities/user.entity';
-import { UserMapper } from '../mapper/user.mapper';
-import { UserRepository } from '../user.repository';
-import { IUser } from '../interfaces/user.interface';
+import { PatientMapper } from '../mapper/patient.mapper';
+import { PatientRepository } from '../patient.repository';
+import { PatientEntity } from '../entities/patient.entity';
+import { CreatePatientDto } from '../dto/create-patient.dto';
+import { IPatient } from '../interfaces/patient.interface';
 
-export class CreateUser {
+export class CreatePatient {
   constructor(
-    private readonly mapper: UserMapper,
-    private readonly repository: UserRepository,
-    private readonly entity: UserEntity,
+    private readonly mapper: PatientMapper,
+    private readonly repository: PatientRepository,
+    private readonly entity: PatientEntity,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<IUser> {
-    const userEntity: UserEntity = await this.entity.create(createUserDto);
-    const userRow: IUser = this.mapper.toRow(userEntity);
-    await this.repository.createUser(userRow);
-    return userRow;
+  async createPatient(
+    createPatientDto: CreatePatientDto,
+  ): Promise<PatientEntity> {
+    const patientEntity: PatientEntity = await this.entity.create(
+      createPatientDto,
+    );
+    const userRow: IPatient = this.mapper.toRow(patientEntity);
+    await this.repository.createPatient(userRow);
+    return patientEntity;
   }
 }

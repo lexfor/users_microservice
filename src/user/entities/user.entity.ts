@@ -1,9 +1,9 @@
 import { v1 as uuidv1 } from 'uuid';
 import { hashSync, compareSync } from 'bcryptjs';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
-import { IUser } from './interfaces/user.interface';
+import { IUser } from '../interfaces/user.interface';
 
 @Injectable()
 export class UserEntity {

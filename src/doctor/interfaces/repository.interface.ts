@@ -1,8 +1,8 @@
-import { Doctor } from './doctor.interface';
-import { Specialization } from './specialization.interface';
+import { IDoctor } from './doctor.interface';
+import { ISpecialization } from './specialization.interface';
 
-export interface DoctorRepository {
-  getDoctorByUserID: (userID: string) => Promise<Doctor>;
-  getAllSpecializations: () => Promise<Specialization[]>;
-  getDoctorsBySpecialization: (specializationID: string) => Promise<Doctor[]>;
+export interface IDoctorRepository {
+  getDoctorByUserID: (userID: string) => Promise<IDoctor>;
+  getAllSpecializations: () => Promise<ISpecialization[]>;
+  getDoctorsBySpecialization: (specializationID: string) => Promise<IDoctor[]>;
 }
