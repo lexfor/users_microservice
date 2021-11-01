@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { GetPatientByID } from './patient/commands/getPatientByID';
-import { PatientEntity } from './patient/entities/patient.entity';
-import { GetDoctorByUserID } from './doctor/commands/getDoctorByUserID';
-import { DoctorEntity } from './doctor/entities/doctor.entity';
+import { GetPatientByID } from './domain/patient/actions/getPatientByID';
+import { PatientEntity } from './domain/patient/entities/patient.entity';
+import { GetDoctorByUserID } from './domain/doctor/actions/getDoctorByUserID';
+import { DoctorEntity } from './domain/doctor/entities/doctor.entity';
 
 @Controller()
 export class GrpcController {
