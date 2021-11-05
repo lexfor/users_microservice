@@ -1,25 +1,31 @@
 import { v1 as uuidv1 } from 'uuid';
 import { Injectable } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Injectable()
 export class DoctorEntity {
+  @ApiProperty()
   private readonly id: string;
-  private readonly firstName: string;
-  private readonly lastName: string;
+  @ApiProperty()
+  private readonly name: string;
+  @ApiProperty()
+  private readonly specialization: string;
+  @ApiProperty()
   private readonly mail: string;
+  @ApiProperty()
   private readonly userID: string;
 
   constructor(
     userID: string,
-    firstName: string,
-    lastName: string,
+    name: string,
+    specialization: string,
     mail: string,
     id = uuidv1(),
   ) {
     this.id = id;
     this.userID = userID;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.name = name;
+    this.specialization = specialization;
     this.mail = mail;
   }
 
@@ -27,12 +33,12 @@ export class DoctorEntity {
     return this.id;
   }
 
-  get getFirstName(): string {
-    return this.firstName;
+  get getName(): string {
+    return this.name;
   }
 
-  get getLastName(): string {
-    return this.lastName;
+  get getSpecialization(): string {
+    return this.specialization;
   }
 
   get getMail(): string {

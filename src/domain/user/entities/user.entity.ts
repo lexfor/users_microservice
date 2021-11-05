@@ -1,32 +1,27 @@
 import { v1 as uuidv1 } from 'uuid';
 import { hashSync, compareSync } from 'bcryptjs';
 import { LoginUserDto } from '../dto/login-user.dto';
-import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Injectable()
 export class UserEntity {
+  @ApiProperty()
   private readonly id: string;
+  @ApiProperty()
   private readonly login: string;
+  @ApiProperty()
   private readonly password: string;
 
-  constructor(
-    login: string,
-    password: string,
-    private readonly config: ConfigService,
-    id = uuidv1(),
-  ) {
-    this.id = id;
+  constructor(login: string, password: string, id: string = uuidv1()) {
     this.login = login;
     this.password = password;
+    this.id = id;
   }
 
-  async create(userDto: LoginUserDto): Promise<UserEntity> {
-    return new UserEntity(
-      userDto.login,
-      await hashSync(userDto.password, +this.config.get('SALT')),
-      this.config,
-    );
+  static async create(userDto: LoginUserDto): Promise<UserEntity> {
+    const hashPassword = await hashSync(userDto.password, +process.env.SALT);
+    return new UserEntity(userDto.login, hashPassword);
   }
 
   async checkPassword(password: string): Promise<boolean> {

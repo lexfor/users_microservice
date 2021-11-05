@@ -14,7 +14,7 @@ export class PatientRepository implements IPatientRepository {
   async createPatient(patientEntity: PatientEntity): Promise<PatientEntity> {
     const patient: IPatient = this.mapper.toRow(patientEntity);
     const sql = `INSERT INTO patients 
-                 (id, name, birthday, gender, mail, user_id) SET VALUES
+                 (id, name, birthday, gender, mail, user_id) VALUES
                  ($1, $2, $3, $4, $5, $6);`;
     await this.pool.query(sql, [
       patient.id,
@@ -31,6 +31,16 @@ export class PatientRepository implements IPatientRepository {
     const sql = `SELECT * FROM patients WHERE user_id = $1`;
     const { rows } = await this.pool.query(sql, [userID]);
     const [result] = rows;
+    if (!result) {
+      return this.mapper.toEntity({
+        id: null,
+        name: null,
+        mail: null,
+        birthday: null,
+        gender: null,
+        user_id: null,
+      });
+    }
     return this.mapper.toEntity(result);
   }
 
@@ -49,6 +59,16 @@ export class PatientRepository implements IPatientRepository {
                  WHERE id = $1`;
     const { rows } = await this.pool.query(sql, [patientID]);
     const [result] = rows;
+    if (!result) {
+      return this.mapper.toEntity({
+        id: null,
+        name: null,
+        mail: null,
+        birthday: null,
+        gender: null,
+        user_id: null,
+      });
+    }
     return this.mapper.toEntity(result);
   }
 }

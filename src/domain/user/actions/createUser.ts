@@ -1,17 +1,15 @@
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
-import { UserMapper } from '../mapper/user.mapper';
 import { UserRepository } from '../user.repository';
-import { IUser } from '../interfaces/user.interface';
+import { Inject } from '@nestjs/common';
 
 export class CreateUser {
   constructor(
-    private readonly repository: UserRepository,
-    private readonly entity: UserEntity,
+    @Inject('DATABASE_REPOSITORY') private readonly repository: UserRepository,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const userEntity: UserEntity = await this.entity.create(createUserDto);
+    const userEntity: UserEntity = await UserEntity.create(createUserDto);
     return await this.repository.createUser(userEntity);
   }
 }

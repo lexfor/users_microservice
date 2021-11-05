@@ -1,7 +1,7 @@
-export interface IDoctor {
+export interface IDoctorMessage {
   id: string;
   name: string;
   mail: string;
   specialization: string;
-  user_id: string;
+  userID: string;
 }

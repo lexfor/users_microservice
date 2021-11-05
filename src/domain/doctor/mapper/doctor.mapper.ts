@@ -5,8 +5,8 @@ export class DoctorMapper {
   toEntity(doctor: IDoctor): DoctorEntity {
     return new DoctorEntity(
       doctor.user_id,
-      doctor.first_name,
-      doctor.last_name,
+      doctor.name,
+      doctor.specialization,
       doctor.mail,
       doctor.id,
     );
@@ -15,8 +15,8 @@ export class DoctorMapper {
   toRow(doctorEntity: DoctorEntity): IDoctor {
     return {
       id: doctorEntity.getID,
-      first_name: doctorEntity.getFirstName,
-      last_name: doctorEntity.getLastName,
+      name: doctorEntity.getName,
+      specialization: doctorEntity.getSpecialization,
       mail: doctorEntity.getMail,
       user_id: doctorEntity.getUserID,
     };

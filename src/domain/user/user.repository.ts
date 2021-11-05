@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository {
   ) {}
   async createUser(userEntity: UserEntity): Promise<UserEntity> {
     const user: IUser = this.mapper.toRow(userEntity);
-    const sql = `INSERT INTO users (id, login, password) SET VALUES
+    const sql = `INSERT INTO users (id, login, password) VALUES
                  ($1, $2, $3);`;
     await this.pool.query(sql, [user.id, user.login, user.password]);
     return userEntity;
@@ -32,6 +32,13 @@ export class UserRepository implements IUserRepository {
         login = $1`;
     const { rows } = await this.pool.query(sql, [login]);
     const [result] = rows;
+    if (!result) {
+      return this.mapper.toEntity({
+        id: null,
+        login: null,
+        password: null,
+      });
+    }
     return this.mapper.toEntity(result);
   }
 }

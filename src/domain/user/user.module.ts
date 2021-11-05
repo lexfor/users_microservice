@@ -1,29 +1,28 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './user.controller';
-import { UserRepository } from './user.repository';
 import { poolFactory } from '../../infrastructure/configs/database.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserEntity } from './entities/user.entity';
 import { UserMapper } from './mapper/user.mapper';
 import { CreateUser } from './actions/createUser';
 import { GetUser } from './actions/getUser';
-import { PatientModule } from '../patient/patient.module';
+import { DoctorRepository } from '../doctor/doctor.repository';
+import { UserRepository } from './user.repository';
 
 @Module({
-  imports: [ConfigModule, PatientModule],
-  controllers: [UserController],
+  imports: [ConfigModule.forRoot()],
   providers: [
     {
       provide: 'DATABASE_POOL',
       inject: [ConfigService],
       useFactory: poolFactory,
     },
-    UserRepository,
-    UserEntity,
-    UserMapper,
+    {
+      provide: 'DATABASE_REPOSITORY',
+      useClass: UserRepository,
+    },
     CreateUser,
     GetUser,
+    UserMapper,
   ],
-  exports: [CreateUser, GetUser],
+  exports: [CreateUser, GetUser, UserMapper],
 })
 export class UserModule {}

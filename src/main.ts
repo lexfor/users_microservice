@@ -1,19 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { grpcClientOptions } from './grpc-client.options';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'grpc',
-        protoPath: join(__dirname, 'grpc/grpc.proto'),
-      },
-    },
-  );
-  await app.listen();
+  const app = await NestFactory.create(AppModule);
+  const config = new DocumentBuilder()
+    .setTitle('Users microservice')
+    .setDescription('Users microservice API')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/swagger', app, document);
+  app.connectMicroservice<MicroserviceOptions>(grpcClientOptions);
+  await app.startAllMicroservices();
+  await app.listen(3000);
 }
 bootstrap();

@@ -1,14 +1,21 @@
 import { v1 as uuidv1 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { CreatePatientDto } from '../dto/create-patient.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Injectable()
 export class PatientEntity {
+  @ApiProperty()
   private readonly id: string;
+  @ApiProperty()
   private readonly name: string;
+  @ApiProperty()
   private readonly birthday: string;
+  @ApiProperty()
   private readonly gender: string;
+  @ApiProperty()
   private readonly mail: string;
+  @ApiProperty()
   private readonly userID: string;
 
   constructor(
@@ -27,7 +34,7 @@ export class PatientEntity {
     this.mail = mail;
   }
 
-  create(createPatientDto: CreatePatientDto): PatientEntity {
+  static create(createPatientDto: CreatePatientDto): PatientEntity {
     return new PatientEntity(
       createPatientDto.user_id,
       createPatientDto.name,

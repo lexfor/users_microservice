@@ -1,12 +1,9 @@
 import { IUser } from '../interfaces/user.interface';
 import { UserEntity } from '../entities/user.entity';
-import { ConfigService } from '@nestjs/config';
 
 export class UserMapper {
-  constructor(private readonly config: ConfigService) {}
-
   toEntity(user: IUser): UserEntity {
-    return new UserEntity(user.login, user.password, this.config, user.id);
+    return new UserEntity(user.login, user.password, user.id);
   }
 
   toRow(userEntity: UserEntity): IUser {

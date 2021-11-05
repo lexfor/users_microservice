@@ -14,7 +14,7 @@ export class DoctorRepository implements IDoctorRepository {
   ) {}
 
   async getDoctorByUserID(userID: string): Promise<DoctorEntity> {
-    const sql = `SELECT doctors.*, specializations.name FROM doctors
+    const sql = `SELECT doctors.*, specializations.name as specialization FROM doctors
                  JOIN doctor_specialization
                  ON doctor_specialization.doctor_id = doctors.id
                  INNER JOIN specializations
@@ -22,6 +22,15 @@ export class DoctorRepository implements IDoctorRepository {
                  WHERE user_id = $1`;
     const { rows } = await this.pool.query(sql, [userID]);
     const [result] = rows;
+    if (!result) {
+      return this.doctorMapper.toEntity({
+        id: null,
+        name: null,
+        mail: null,
+        specialization: null,
+        user_id: null,
+      });
+    }
     return this.doctorMapper.toEntity(result);
   }
 
@@ -29,6 +38,12 @@ export class DoctorRepository implements IDoctorRepository {
     const sql = `SELECT * FROM specializations`;
     const { rows } = await this.pool.query(sql);
     return rows.map((specialization) => {
+      if (!specialization) {
+        return this.specializationMapper.toEntity({
+          id: null,
+          name: null,
+        });
+      }
       return this.specializationMapper.toEntity(specialization);
     });
   }
@@ -36,7 +51,7 @@ export class DoctorRepository implements IDoctorRepository {
   async getDoctorsBySpecialization(
     specializationID: string,
   ): Promise<DoctorEntity[]> {
-    const sql = `SELECT doctors.*, specializations.name FROM doctors
+    const sql = `SELECT doctors.*, specializations.name as specialization FROM doctors
                  JOIN doctor_specialization
                  ON doctor_specialization.doctor_id = doctors.id
                  INNER JOIN specializations
@@ -44,6 +59,15 @@ export class DoctorRepository implements IDoctorRepository {
                  WHERE specializations.id = $1`;
     const { rows } = await this.pool.query(sql, [specializationID]);
     return rows.map((doctor) => {
+      if (!doctor) {
+        return this.doctorMapper.toEntity({
+          id: null,
+          name: null,
+          mail: null,
+          specialization: null,
+          user_id: null,
+        });
+      }
       return this.doctorMapper.toEntity(doctor);
     });
   }
