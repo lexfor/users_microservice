@@ -7,3 +7,5 @@ mail VARCHAR(255),
 user_id VARCHAR(255),
 PRIMARY KEY (id),
 FOREIGN KEY (user_id) REFERENCES users(id));
+
+CREATE INDEX patients_name_index ON patients(name);
