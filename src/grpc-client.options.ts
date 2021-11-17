@@ -4,7 +4,7 @@ import { join } from 'path';
 export const grpcClientOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
-    url: 'http://localhost:8080',
+    url: '0.0.0.0:8080',
     package: 'lab',
     protoPath: join(__dirname, '../grpc/grpc.proto'),
   },
