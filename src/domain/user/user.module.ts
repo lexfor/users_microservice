@@ -4,11 +4,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserMapper } from './mapper/user.mapper';
 import { CreateUser } from './actions/createUser';
 import { GetUser } from './actions/getUser';
-import { DoctorRepository } from '../doctor/doctor.repository';
 import { UserRepository } from './user.repository';
+import config from '../../infrastructure/config';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [
+    ConfigModule.forRoot({
+      load: [config],
+    }),
+  ],
   providers: [
     {
       provide: 'DATABASE_POOL',

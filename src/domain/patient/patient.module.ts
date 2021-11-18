@@ -8,9 +8,14 @@ import { GetAllPatients } from './actions/getAllPatients';
 import { CreatePatient } from './actions/createPatient';
 import { FindPatientByUserID } from './actions/findPatientByUserID';
 import { GetPatientByID } from './actions/getPatientByID';
+import config from '../../infrastructure/config';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [
+    ConfigModule.forRoot({
+      load: [config],
+    }),
+  ],
   controllers: [PatientController],
   providers: [
     {

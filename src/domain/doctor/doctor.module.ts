@@ -8,9 +8,14 @@ import { SpecializationMapper } from './mapper/specialization.mapper';
 import { GetAllSpecializations } from './actions/getAllSpecializations';
 import { GetDoctorsBySpecializations } from './actions/getDoctorsBySpecializations';
 import { GetDoctorByUserID } from './actions/getDoctorByUserID';
+import config from '../../infrastructure/config';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [
+    ConfigModule.forRoot({
+      load: [config],
+    }),
+  ],
   controllers: [DoctorController],
   providers: [
     {
