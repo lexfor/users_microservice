@@ -14,8 +14,6 @@ export class GetAllSpecializations {
     const value: SpecializationEntity[] = await this.cacheManager.get(
       'all/specializations',
     );
-    console.log(await this.cacheManager.get('all/specializations'));
-    console.log(value);
     if (!value) {
       const specializations = await this.repository.getAllSpecializations();
       await this.cacheManager.set('all/specializations', specializations, {
