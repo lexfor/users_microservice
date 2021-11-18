@@ -14,10 +14,11 @@ export class GetAllSpecializations {
     const value: SpecializationEntity[] = await this.cacheManager.get(
       'all/specializations',
     );
-    console.log(value);
     if (!value) {
       const specializations = await this.repository.getAllSpecializations();
+      console.log(specializations);
       await this.cacheManager.set('all/specializations', specializations);
+      console.log(await this.cacheManager.get('all/specializations'));
       return specializations;
     }
     return value;
