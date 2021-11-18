@@ -16,7 +16,9 @@ export class GetAllSpecializations {
     console.log(value);
     if (!value) {
       const specializations = await this.repository.getAllSpecializations();
-      await this.cacheManager.set('all/specializations', specializations);
+      await this.cacheManager.set('all/specializations', specializations, {
+        ttl: 3600,
+      });
       return specializations;
     }
   }
