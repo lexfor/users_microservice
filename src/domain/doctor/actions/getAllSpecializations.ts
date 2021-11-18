@@ -11,7 +11,7 @@ export class GetAllSpecializations {
   ) {}
 
   async getAllSpecializations(): Promise<SpecializationEntity[]> {
-    const value = await this.cacheManager.get('all/specializations');
+    const value: SpecializationEntity[] = await this.cacheManager.get('all/specializations');
     console.log(await this.cacheManager.get('all/specializations'));
     console.log(value);
     if (!value) {
