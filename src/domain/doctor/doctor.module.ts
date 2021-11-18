@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { DoctorController } from './doctor.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { poolFactory } from '../../infrastructure/configs/database.config';
@@ -15,6 +15,7 @@ import config from '../../infrastructure/config';
     ConfigModule.forRoot({
       load: [config],
     }),
+    CacheModule.register(),
   ],
   controllers: [DoctorController],
   providers: [

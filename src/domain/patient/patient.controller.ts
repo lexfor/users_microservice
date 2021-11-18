@@ -8,7 +8,6 @@ import {
 import { GetAllPatients } from './actions/getAllPatients';
 import { PatientEntity } from './entities/patient.entity';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { DoctorEntity } from "../doctor/entities/doctor.entity";
 
 @ApiTags('Patients')
 @Controller('patient')
