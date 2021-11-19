@@ -1,14 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { IPatientRepository } from './interfaces/repository.interface';
 import { IPatient } from './interfaces/patient.interface';
 import { PatientEntity } from './entities/patient.entity';
 import { PatientMapper } from './mapper/patient.mapper';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class PatientRepository implements IPatientRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
     private readonly mapper: PatientMapper,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async createPatient(patientEntity: PatientEntity): Promise<PatientEntity> {
@@ -28,10 +30,20 @@ export class PatientRepository implements IPatientRepository {
   }
 
   async findPatientByUserID(userID: string): Promise<PatientEntity> {
+    let value: IPatient = await this.cacheManager.get(`patient/${userID}`);
+
     const sql = `SELECT * FROM patients WHERE user_id = $1`;
-    const { rows } = await this.pool.query(sql, [userID]);
-    const [result] = rows;
-    if (!result) {
+
+    if (!value) {
+      const { rows } = await this.pool.query(sql, [userID]);
+      const [result] = rows;
+      await this.cacheManager.set(`patient/${userID}`, result, {
+        ttl: 3600,
+      });
+      value = result;
+    }
+
+    if (!value) {
       return this.mapper.toEntity({
         id: null,
         name: null,
@@ -41,7 +53,7 @@ export class PatientRepository implements IPatientRepository {
         user_id: null,
       });
     }
-    return this.mapper.toEntity(result);
+    return this.mapper.toEntity(value);
   }
 
   async getAllPatients(patientInfo: string): Promise<PatientEntity[]> {
@@ -55,11 +67,20 @@ export class PatientRepository implements IPatientRepository {
   }
 
   async getPatientByID(patientID: string): Promise<PatientEntity> {
-    const sql = `SELECT * FROM patients
-                 WHERE id = $1`;
-    const { rows } = await this.pool.query(sql, [patientID]);
-    const [result] = rows;
-    if (!result) {
+    let value: IPatient = await this.cacheManager.get(`patient/${patientID}`);
+
+    const sql = `SELECT * FROM patients WHERE id = $1`;
+
+    if (!value) {
+      const { rows } = await this.pool.query(sql, [patientID]);
+      const [result] = rows;
+      await this.cacheManager.set(`patient/${patientID}`, result, {
+        ttl: 3600,
+      });
+      value = result;
+    }
+
+    if (!value) {
       return this.mapper.toEntity({
         id: null,
         name: null,
@@ -69,6 +90,6 @@ export class PatientRepository implements IPatientRepository {
         user_id: null,
       });
     }
-    return this.mapper.toEntity(result);
+    return this.mapper.toEntity(value);
   }
 }
