@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { poolFactory } from '../../infrastructure/configs/database.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserMapper } from './mapper/user.mapper';
@@ -12,6 +12,7 @@ import config from '../../infrastructure/config';
     ConfigModule.forRoot({
       load: [config],
     }),
+    CacheModule.register(),
   ],
   providers: [
     {
