@@ -4,10 +4,7 @@ import * as fs from 'fs';
 export class CustomLogger implements LoggerService {
   private readonly fd: number;
   constructor() {
-    this.fd = fs.openSync(
-      `./logs/Start:${new Date().toLocaleDateString()}${new Date().toLocaleTimeString()}`,
-      'a',
-    );
+    this.fd = fs.openSync(`./logs/Start:${new Date().toISOString()}`, 'a');
   }
   log(message: any, ...optionalParams: any[]) {
     fs.writeSync(
