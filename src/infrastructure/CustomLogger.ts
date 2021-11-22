@@ -4,6 +4,7 @@ import * as fs from 'fs';
 export class CustomLogger implements LoggerService {
   private readonly fd: number;
   constructor() {
+    console.log(fs.realpath);
     this.fd = fs.openSync(`../../logs/${new Date().toISOString()}logs`, 'a');
   }
   log(message: any, ...optionalParams: any[]) {
