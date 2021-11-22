@@ -5,7 +5,7 @@ export class CustomLogger implements LoggerService {
   private readonly fd: number;
   constructor() {
     this.fd = fs.openSync(
-      `./logs/Start:${new Date().getDate()}${new Date().getTime()}`,
+      `./logs/Start:${new Date().toLocaleDateString()}${new Date().toLocaleTimeString()}`,
       'a',
     );
   }
