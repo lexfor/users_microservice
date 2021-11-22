@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { IUser } from './interfaces/user.interface';
 import { roles } from '../../infrastructure/constants';
 import { IUserRepository } from './interfaces/repository.interface';
@@ -11,6 +11,7 @@ import { delay, end, start } from '../../infrastructure/timer';
 export class UserRepository implements IUserRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
+    private readonly logger = new Logger('Doctor repository'),
     private readonly mapper: UserMapper,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
@@ -21,7 +22,7 @@ export class UserRepository implements IUserRepository {
                  ($1, $2, $3);`;
     await this.pool.query(sql, [user.id, user.login, user.password]);
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     return userEntity;
   }
 
@@ -49,7 +50,7 @@ export class UserRepository implements IUserRepository {
       value = result;
     }
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     if (!value) {
       return this.mapper.toEntity({
         id: null,

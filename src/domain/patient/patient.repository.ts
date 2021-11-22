@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { IPatientRepository } from './interfaces/repository.interface';
 import { IPatient } from './interfaces/patient.interface';
 import { PatientEntity } from './entities/patient.entity';
@@ -10,6 +10,7 @@ import { delay, end, start } from '../../infrastructure/timer';
 export class PatientRepository implements IPatientRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
+    private readonly logger = new Logger('Doctor repository'),
     private readonly mapper: PatientMapper,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
@@ -29,7 +30,7 @@ export class PatientRepository implements IPatientRepository {
       patient.user_id,
     ]);
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     return patientEntity;
   }
 
@@ -48,7 +49,7 @@ export class PatientRepository implements IPatientRepository {
       value = result;
     }
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     if (!value) {
       return this.mapper.toEntity({
         id: null,
@@ -69,7 +70,7 @@ export class PatientRepository implements IPatientRepository {
                  OR mail LIKE '%${patientInfo}%'`;
     const { rows } = await this.pool.query(sql);
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     return rows.map((row) => {
       return this.mapper.toEntity(row);
     });
@@ -90,7 +91,7 @@ export class PatientRepository implements IPatientRepository {
       value = result;
     }
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     if (!value) {
       return this.mapper.toEntity({
         id: null,

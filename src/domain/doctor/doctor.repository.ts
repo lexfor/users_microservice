@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { IDoctorRepository } from './interfaces/repository.interface';
 import { SpecializationMapper } from './mapper/specialization.mapper';
 import { SpecializationEntity } from './entities/specialization.entity';
@@ -13,6 +13,7 @@ import { end, start, delay } from '../../infrastructure/timer';
 export class DoctorRepository implements IDoctorRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
+    private readonly logger = new Logger('Doctor repository'),
     private readonly specializationMapper: SpecializationMapper,
     private readonly doctorMapper: DoctorMapper,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -37,7 +38,7 @@ export class DoctorRepository implements IDoctorRepository {
       value = result;
     }
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     if (!value) {
       return this.doctorMapper.toEntity({
         id: null,
@@ -64,7 +65,7 @@ export class DoctorRepository implements IDoctorRepository {
       value = rows;
     }
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     return value.map((specialization) => {
       if (!specialization) {
         return this.specializationMapper.toEntity({
@@ -101,7 +102,7 @@ export class DoctorRepository implements IDoctorRepository {
       value = rows;
     }
     end();
-    console.debug(delay());
+    this.logger.log(delay());
     return value.map((doctor) => {
       if (!doctor) {
         return this.doctorMapper.toEntity({
