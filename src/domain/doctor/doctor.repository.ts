@@ -54,7 +54,7 @@ export class DoctorRepository implements IDoctorRepository {
       const sql = `SELECT * FROM specializations`;
       const { rows } = await this.pool.query(sql);
       await this.cacheManager.set('all/specializations', rows, {
-        ttl: 3600,
+        ttl: 0,
       });
       value = rows;
     }
