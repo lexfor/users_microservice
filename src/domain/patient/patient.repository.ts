@@ -4,6 +4,7 @@ import { IPatient } from './interfaces/patient.interface';
 import { PatientEntity } from './entities/patient.entity';
 import { PatientMapper } from './mapper/patient.mapper';
 import { Cache } from 'cache-manager';
+import { delay, end, start } from '../../infrastructure/timer';
 
 @Injectable()
 export class PatientRepository implements IPatientRepository {
@@ -14,6 +15,7 @@ export class PatientRepository implements IPatientRepository {
   ) {}
 
   async createPatient(patientEntity: PatientEntity): Promise<PatientEntity> {
+    start();
     const patient: IPatient = this.mapper.toRow(patientEntity);
     const sql = `INSERT INTO patients 
                  (id, name, birthday, gender, mail, user_id) VALUES
@@ -26,10 +28,13 @@ export class PatientRepository implements IPatientRepository {
       patient.mail,
       patient.user_id,
     ]);
+    end();
+    console.debug(delay());
     return patientEntity;
   }
 
   async findPatientByUserID(userID: string): Promise<PatientEntity> {
+    start();
     let value: IPatient = await this.cacheManager.get(`patient/${userID}`);
 
     const sql = `SELECT * FROM patients WHERE user_id = $1`;
@@ -42,7 +47,8 @@ export class PatientRepository implements IPatientRepository {
       });
       value = result;
     }
-
+    end();
+    console.debug(delay());
     if (!value) {
       return this.mapper.toEntity({
         id: null,
@@ -57,16 +63,20 @@ export class PatientRepository implements IPatientRepository {
   }
 
   async getAllPatients(patientInfo: string): Promise<PatientEntity[]> {
+    start();
     const sql = `SELECT * FROM patients
                  WHERE name LIKE '%${patientInfo}%'
                  OR mail LIKE '%${patientInfo}%'`;
     const { rows } = await this.pool.query(sql);
+    end();
+    console.debug(delay());
     return rows.map((row) => {
       return this.mapper.toEntity(row);
     });
   }
 
   async getPatientByID(patientID: string): Promise<PatientEntity> {
+    start();
     let value: IPatient = await this.cacheManager.get(`patient/${patientID}`);
 
     const sql = `SELECT * FROM patients WHERE id = $1`;
@@ -79,7 +89,8 @@ export class PatientRepository implements IPatientRepository {
       });
       value = result;
     }
-
+    end();
+    console.debug(delay());
     if (!value) {
       return this.mapper.toEntity({
         id: null,

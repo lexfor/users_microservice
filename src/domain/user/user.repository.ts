@@ -5,6 +5,7 @@ import { IUserRepository } from './interfaces/repository.interface';
 import { UserMapper } from './mapper/user.mapper';
 import { UserEntity } from './entities/user.entity';
 import { Cache } from 'cache-manager';
+import { delay, end, start } from '../../infrastructure/timer';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -14,14 +15,18 @@ export class UserRepository implements IUserRepository {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   async createUser(userEntity: UserEntity): Promise<UserEntity> {
+    start();
     const user: IUser = this.mapper.toRow(userEntity);
     const sql = `INSERT INTO users (id, login, password) VALUES
                  ($1, $2, $3);`;
     await this.pool.query(sql, [user.id, user.login, user.password]);
+    end();
+    console.debug(delay());
     return userEntity;
   }
 
   async getUser(login: string, role: string): Promise<UserEntity> {
+    start();
     let value: IUser = await this.cacheManager.get(`user/${login}`);
 
     let join = '';
@@ -43,7 +48,8 @@ export class UserRepository implements IUserRepository {
       });
       value = result;
     }
-
+    end();
+    console.debug(delay());
     if (!value) {
       return this.mapper.toEntity({
         id: null,

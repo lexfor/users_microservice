@@ -7,6 +7,7 @@ import { DoctorMapper } from './mapper/doctor.mapper';
 import { Cache } from 'cache-manager';
 import { ISpecialization } from './interfaces/specialization.interface';
 import { IDoctor } from './interfaces/doctor.interface';
+import { end, start, delay } from '../../infrastructure/timer';
 
 @Injectable()
 export class DoctorRepository implements IDoctorRepository {
@@ -18,6 +19,7 @@ export class DoctorRepository implements IDoctorRepository {
   ) {}
 
   async getDoctorByUserID(userID: string): Promise<DoctorEntity> {
+    start();
     let value: IDoctor = await this.cacheManager.get(`doctor/${userID}`);
 
     const sql = `SELECT doctors.*, specializations.name as specialization FROM doctors
@@ -34,6 +36,8 @@ export class DoctorRepository implements IDoctorRepository {
       });
       value = result;
     }
+    end();
+    console.debug(delay());
     if (!value) {
       return this.doctorMapper.toEntity({
         id: null,
@@ -47,6 +51,7 @@ export class DoctorRepository implements IDoctorRepository {
   }
 
   async getAllSpecializations(): Promise<SpecializationEntity[]> {
+    start();
     let value: ISpecialization[] = await this.cacheManager.get(
       'all/specializations',
     );
@@ -58,6 +63,8 @@ export class DoctorRepository implements IDoctorRepository {
       });
       value = rows;
     }
+    end();
+    console.debug(delay());
     return value.map((specialization) => {
       if (!specialization) {
         return this.specializationMapper.toEntity({
@@ -72,6 +79,7 @@ export class DoctorRepository implements IDoctorRepository {
   async getDoctorsBySpecialization(
     specializationID: string,
   ): Promise<DoctorEntity[]> {
+    start();
     let value: IDoctor[] = await this.cacheManager.get(
       `doctor/specialization/${specializationID}`,
     );
@@ -92,6 +100,8 @@ export class DoctorRepository implements IDoctorRepository {
       );
       value = rows;
     }
+    end();
+    console.debug(delay());
     return value.map((doctor) => {
       if (!doctor) {
         return this.doctorMapper.toEntity({
