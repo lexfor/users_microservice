@@ -22,7 +22,7 @@ export class UserRepository implements IUserRepository {
                  ($1, $2, $3);`;
     await this.pool.query(sql, [user.id, user.login, user.password]);
     end();
-    this.logger.log(delay());
+    this.logger.log(`create user time: ${delay()}ms`);
     return userEntity;
   }
 
@@ -50,7 +50,7 @@ export class UserRepository implements IUserRepository {
       value = result;
     }
     end();
-    this.logger.log(delay());
+    this.logger.log(`get user time: ${delay()}ms`);
     if (!value) {
       return this.mapper.toEntity({
         id: null,

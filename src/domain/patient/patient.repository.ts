@@ -30,7 +30,7 @@ export class PatientRepository implements IPatientRepository {
       patient.user_id,
     ]);
     end();
-    this.logger.log(delay());
+    this.logger.log(`create patient time: ${delay()}ms`);
     return patientEntity;
   }
 
@@ -49,7 +49,7 @@ export class PatientRepository implements IPatientRepository {
       value = result;
     }
     end();
-    this.logger.log(delay());
+    this.logger.log(`get patient by user id time: ${delay()}ms`);
     if (!value) {
       return this.mapper.toEntity({
         id: null,
@@ -70,7 +70,7 @@ export class PatientRepository implements IPatientRepository {
                  OR mail LIKE '%${patientInfo}%'`;
     const { rows } = await this.pool.query(sql);
     end();
-    this.logger.log(delay());
+    this.logger.log(`get all patients time: ${delay()}ms`);
     return rows.map((row) => {
       return this.mapper.toEntity(row);
     });
@@ -91,7 +91,7 @@ export class PatientRepository implements IPatientRepository {
       value = result;
     }
     end();
-    this.logger.log(delay());
+    this.logger.log(`get patient by id time: ${delay()}ms`);
     if (!value) {
       return this.mapper.toEntity({
         id: null,

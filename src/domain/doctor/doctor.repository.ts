@@ -38,7 +38,7 @@ export class DoctorRepository implements IDoctorRepository {
       value = result;
     }
     end();
-    this.logger.log(delay());
+    this.logger.log(`get doctor by user time: ${delay()}ms`);
     if (!value) {
       return this.doctorMapper.toEntity({
         id: null,
@@ -65,7 +65,7 @@ export class DoctorRepository implements IDoctorRepository {
       value = rows;
     }
     end();
-    this.logger.log(delay());
+    this.logger.log(`get all specializations time: ${delay()}ms`);
     return value.map((specialization) => {
       if (!specialization) {
         return this.specializationMapper.toEntity({
@@ -102,7 +102,7 @@ export class DoctorRepository implements IDoctorRepository {
       value = rows;
     }
     end();
-    this.logger.log(delay());
+    this.logger.log(`get doctor by specialization time: ${delay()}ms`);
     return value.map((doctor) => {
       if (!doctor) {
         return this.doctorMapper.toEntity({
