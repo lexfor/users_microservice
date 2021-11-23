@@ -6,6 +6,7 @@ import { CreateUser } from './actions/createUser';
 import { GetUser } from './actions/getUser';
 import { UserRepository } from './user.repository';
 import config from '../../infrastructure/config';
+import { CustomLogger } from '../../infrastructure/logger/CustomLogger';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import config from '../../infrastructure/config';
       load: [config],
     }),
     CacheModule.register(),
+    CustomLogger,
   ],
   providers: [
     {

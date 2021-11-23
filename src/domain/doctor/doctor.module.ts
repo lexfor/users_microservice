@@ -9,6 +9,7 @@ import { GetAllSpecializations } from './actions/getAllSpecializations';
 import { GetDoctorsBySpecializations } from './actions/getDoctorsBySpecializations';
 import { GetDoctorByUserID } from './actions/getDoctorByUserID';
 import config from '../../infrastructure/config';
+import { CustomLogger } from '../../infrastructure/logger/CustomLogger';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import config from '../../infrastructure/config';
       load: [config],
     }),
     CacheModule.register(),
+    CustomLogger,
   ],
   controllers: [DoctorController],
   providers: [

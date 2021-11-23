@@ -1,19 +1,22 @@
-import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { IPatientRepository } from './interfaces/repository.interface';
 import { IPatient } from './interfaces/patient.interface';
 import { PatientEntity } from './entities/patient.entity';
 import { PatientMapper } from './mapper/patient.mapper';
 import { Cache } from 'cache-manager';
 import { delay, end, start } from '../../infrastructure/timer';
+import { CustomLogger } from '../../infrastructure/logger/CustomLogger';
 
 @Injectable()
 export class PatientRepository implements IPatientRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
-    private readonly logger = new Logger('Doctor repository'),
+    private readonly logger: CustomLogger,
     private readonly mapper: PatientMapper,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) {
+    this.logger.setContext('Resolution repository');
+  }
 
   async createPatient(patientEntity: PatientEntity): Promise<PatientEntity> {
     start();

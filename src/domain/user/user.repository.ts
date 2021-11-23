@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { IUser } from './interfaces/user.interface';
 import { roles } from '../../infrastructure/constants';
 import { IUserRepository } from './interfaces/repository.interface';
@@ -6,15 +6,18 @@ import { UserMapper } from './mapper/user.mapper';
 import { UserEntity } from './entities/user.entity';
 import { Cache } from 'cache-manager';
 import { delay, end, start } from '../../infrastructure/timer';
+import { CustomLogger } from '../../infrastructure/logger/CustomLogger';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
-    private readonly logger = new Logger('Doctor repository'),
+    private readonly logger: CustomLogger,
     private readonly mapper: UserMapper,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) {
+    this.logger.setContext('Resolution repository');
+  }
   async createUser(userEntity: UserEntity): Promise<UserEntity> {
     start();
     const user: IUser = this.mapper.toRow(userEntity);

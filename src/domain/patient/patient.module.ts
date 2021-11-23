@@ -9,6 +9,7 @@ import { CreatePatient } from './actions/createPatient';
 import { FindPatientByUserID } from './actions/findPatientByUserID';
 import { GetPatientByID } from './actions/getPatientByID';
 import config from '../../infrastructure/config';
+import { CustomLogger } from '../../infrastructure/logger/CustomLogger';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import config from '../../infrastructure/config';
       load: [config],
     }),
     CacheModule.register(),
+    CustomLogger,
   ],
   controllers: [PatientController],
   providers: [

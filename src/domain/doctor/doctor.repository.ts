@@ -8,16 +8,19 @@ import { Cache } from 'cache-manager';
 import { ISpecialization } from './interfaces/specialization.interface';
 import { IDoctor } from './interfaces/doctor.interface';
 import { end, start, delay } from '../../infrastructure/timer';
+import { CustomLogger } from '../../infrastructure/logger/CustomLogger';
 
 @Injectable()
 export class DoctorRepository implements IDoctorRepository {
   constructor(
     @Inject('DATABASE_POOL') private pool,
-    private readonly logger = new Logger('Doctor repository'),
+    private readonly logger: CustomLogger,
     private readonly specializationMapper: SpecializationMapper,
     private readonly doctorMapper: DoctorMapper,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) {
+    this.logger.setContext('Resolution repository');
+  }
 
   async getDoctorByUserID(userID: string): Promise<DoctorEntity> {
     start();
