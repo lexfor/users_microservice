@@ -9,3 +9,5 @@ PRIMARY KEY (id),
 FOREIGN KEY (user_id) REFERENCES users(id));
 
 CREATE INDEX patients_name_index ON patients(name);
+CREATE UNIQUE INDEX mail_idx ON patients (mail);
+CREATE UNIQUE INDEX user_id_idx ON patients (user_id);

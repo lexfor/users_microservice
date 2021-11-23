@@ -4,4 +4,4 @@ login VARCHAR(255),
 password VARCHAR(255),
 PRIMARY KEY (id));
 
-CREATE INDEX login_index ON users(login)
+CREATE UNIQUE INDEX login_index ON users(login)

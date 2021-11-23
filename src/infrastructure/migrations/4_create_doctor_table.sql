@@ -7,3 +7,4 @@ PRIMARY KEY (id),
 FOREIGN KEY (user_id) REFERENCES users(id));
 
 CREATE INDEX doctor_mail_index ON doctors(mail);
+CREATE UNIQUE INDEX user_id_doctors_idx ON doctors(user_id);
