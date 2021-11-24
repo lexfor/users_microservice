@@ -4,7 +4,7 @@ import {
   HealthIndicatorResult,
   HealthCheckError,
 } from '@nestjs/terminus';
-import { sendMessage } from "../snsMessage";
+import { sendMessage } from '../sendMessage';
 
 @Injectable()
 export class DatabaseHealthIndicator extends HealthIndicator {
