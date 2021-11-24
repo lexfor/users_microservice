@@ -1,6 +1,6 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import { sendFile } from '../sendS3File';
+import { sendFile } from '../aws/sendS3File';
 
 @Injectable()
 export class CustomLogger extends ConsoleLogger {
@@ -20,12 +20,12 @@ export class CustomLogger extends ConsoleLogger {
       `Logs: ${message}\n Module: ${optionalParams.toString()}\n`,
     );
   }
-  error(message: any, ...optionalParams: any[]) {
+  async error(message: any, ...optionalParams: any[]) {
     fs.writeSync(
       this.fd,
       `Error: ${message}\n Module: ${optionalParams.toString()}\n`,
     );
-    sendFile(this.fileName, this.filePath);
+    await sendFile(this.fileName, this.filePath);
   }
   warn(message: any, ...optionalParams: any[]) {
     fs.writeSync(
