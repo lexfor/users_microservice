@@ -12,6 +12,7 @@ export class CustomLogger extends ConsoleLogger {
     this.fileName = `Source:${name}StartDate:${new Date().toISOString()}`;
     this.filePath = `./logs/`;
     this.fd = fs.openSync(`${this.filePath}${this.fileName}`, 'a');
+    sendFile(this.fileName, this.filePath);
   }
 
   log(message: any, ...optionalParams: any[]) {
