@@ -27,7 +27,7 @@ export class DoctorRepository implements IDoctorRepository {
     let value: IDoctor = await this.cacheManager.get(`doctor/${userID}`);
 
     const sql = `SELECT doctors.*, specializations.name as specialization FROM doctors
-                 JOIN doctor_specialization
+                 INNER JOIN doctor_specialization
                  ON doctor_specialization.doctor_id = doctors.id
                  INNER JOIN specializations
                  ON doctor_specialization.specialization_id = specializations.id
@@ -88,7 +88,7 @@ export class DoctorRepository implements IDoctorRepository {
       `doctor/specialization/${specializationID}`,
     );
     const sql = `SELECT doctors.*, specializations.name as specialization FROM doctors
-                 JOIN doctor_specialization
+                 INNER JOIN doctor_specialization
                  ON doctor_specialization.doctor_id = doctors.id
                  INNER JOIN specializations
                  ON doctor_specialization.specialization_id = specializations.id

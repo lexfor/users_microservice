@@ -69,8 +69,7 @@ export class PatientRepository implements IPatientRepository {
   async getAllPatients(patientInfo: string): Promise<PatientEntity[]> {
     start();
     const sql = `SELECT * FROM patients
-                 WHERE name LIKE '%${patientInfo}%'
-                 OR mail LIKE '%${patientInfo}%'`;
+                 WHERE name LIKE '${patientInfo}%'`;
     const { rows } = await this.pool.query(sql);
     end();
     this.logger.log(`get all patients time: ${delay()}ms`);

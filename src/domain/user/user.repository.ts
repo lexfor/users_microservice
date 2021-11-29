@@ -36,13 +36,12 @@ export class UserRepository implements IUserRepository {
     let join = '';
     if (role === roles.doctor) {
       join = `
-        JOIN doctors ON 
+        INNER JOIN doctors ON 
         doctors.user_id = users.id`;
     }
     const sql = `SELECT users.* FROM users
         ${join}
-        WHERE 
-        login = $1`;
+        WHERE login = $1`;
 
     if (!value) {
       const { rows } = await this.pool.query(sql, [login]);
